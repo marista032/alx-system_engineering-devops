@@ -1,4 +1,4 @@
-Task 0; Create a RSA key pair.
+Task 0: Create a RSA key pair.
 
 Requirements:
 
