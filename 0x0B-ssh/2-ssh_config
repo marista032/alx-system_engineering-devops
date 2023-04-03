@@ -1,5 +1,5 @@
 # Configuration for connecting to the server
 Host 100.25.144.79
-#    User ubuntu
+    User ubuntu
     IdentityFile ~/.ssh/school
     PasswordAuthentication no
