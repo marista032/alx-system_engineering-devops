@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# fix Ubuntu container's to listen on port 80
+# to fix Ubuntu container to be able to listen on port 80
 # debugging nginx port 80
 
 sudo ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
