@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# this file configures and starts a new Nginx server so that /redirect_me is redirecting to another page.
+# this file configures and starts a new Nginx server such that the file  /redirect_me will redirect to another new page.
 # The redirection file must be a “301 Moved Permanently”.
 
 sudo apt-get update -y
 sudo apt-get install nginx -y
 
-# This leads to the Redirection Page
+# This will lead to the Redirection Page. 
 sudo sed -i '/server_name _;/a \\t location /redirect_me {\n\t\t return 301  https://www.youtube.com/watch?v=rv7uzsBm8zw;\n\t}' /etc/nginx/sites-available/default
 
 echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
 
 sudo sed -i '/server_name _;/a \        error_page 404 /custom_404.html;\n        location = /custom_404.html {\n                internal;\n        }' /etc/nginx/sites-available/default
 
-# This is the Reload nginx configuration
+# This is the Reload nginx configuration.
 sudo service nginx restart
