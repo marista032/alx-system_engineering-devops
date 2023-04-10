@@ -2,34 +2,17 @@
 # This Bash script contains documentatio that shows the required information on the subdomains used in this project.
 
 # It configures the domain zone such that the subdomains: lb-01, web-01 and web-02
-#set -x
 
-# for the checker to work please remove the colors.
-
-# colors
-blue='\e[1;34m'
-brown='\e[0;33m'
-reset='\033[0m'
-
-# variables & parameters
-subdomains=( "www" "lb-01" "web-01" "web-02" )
-domain="$1"
-sub="$2"
-
-dig_cmd () {
-        # func variables
-        sub="$2"
-        INFO="$(dig "$sub.$domain" | grep -A1 'ANSWER SECTION:' | awk 'NR==2')"
-        IP=$(echo "$INFO" | awk '{print $5}')
-        RECORD=$(echo "$INFO" | awk '{print $4}')
-
-        echo -e "${brown}The subdomain ${blue}$sub${brown} is a ${blue}$RECORD${brown} record and points to ${blue}$IP${reset}"
+ip_extract () {
+    extract=$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:')
+    echo "$extract" | awk '{split($1,a,"."); print "The subdomain " a[1] " is a " $4 " record and points to " $5}' | tail -1
 }
 
-if [ $# -eq 1 ]; then
-        for subs in "${subdomains[@]}"; do
-                dig_cmd "$domain" "$subs"
-        done
-elif [ $# -eq 2 ]; then
-        dig_cmd "$domain" "$sub"
+if [ "$#" == 1 ]; then
+    ip_extract "$1" "www"
+    ip_extract "$1" "lb-01"
+    ip_extract "$1" "web-01"
+    ip_extract "$1" "web-02"
+elif [ "$#" == 2 ]; then
+    ip_extract "$1" "$2"
 fi
