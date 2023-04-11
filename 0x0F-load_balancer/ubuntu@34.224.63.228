@@ -9,6 +9,5 @@ echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
 
 #creating custom header to my website
 sudo sed -i "/^http {/a \    add_header X-Served-By $HOSTNAME;" /etc/nginx/nginx.conf
-
 # restarting my server
 sudo service nginx restart
