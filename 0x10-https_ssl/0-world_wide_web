@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 # This Bash script contains documentatio that shows the required information on the subdomains used in this project.
 
-# It configures the domain zone such that the subdomains: lb-01, web-01 and web-02
+# It configures the domain zone such that the subdomains: lb-01, web-01 and web-2
 
-ip_extract () {
-    extract=$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:')
-    echo "$extract" | awk '{split($1,a,"."); print "The subdomain " a[1] " is a " $4 " record and points to " $5}' | tail -1
+dns_config () {
+    script=$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:' | tr '\t' '\n' | tail -2 | tr '\n' ' ')
+    echo "$2 $script" | awk '{print "The subdomain " $1 " is a " $2 " record and points to " $3}'
 }
 
-if [ "$#" == 1 ]; then
-    ip_extract "$1" "www"
-    ip_extract "$1" "lb-01"
-    ip_extract "$1" "web-01"
-    ip_extract "$1" "web-02"
-elif [ "$#" == 2 ]; then
-    ip_extract "$1" "$2"
+if [ "$#" == 1 ]
+then
+  dns_config "$1" "www"
+  dns_config "$1" "lb-01"
+  dns_config "$1" "web-01"
+  dns_config "$1" "web-02"
+elif [ "$#" == 2 ]
+then
+  dns_config "$1" "$2"
 fi
+
