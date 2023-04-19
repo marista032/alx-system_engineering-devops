@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Installs HAProxy version 1.8 with the following configurations
 # Enables management via the init script and distributes the requests using a round-robin algorithm
-# Updating the package 
+# Updating the package list
 
 sudo apt-get update
 sudo apt-get install haproxy -y
