@@ -1,9 +1,24 @@
-#!/usr/bin/env bash
-# Install and configure HAproxy 
-sudo apt-get update
-sudo apt-get install haproxy -y 
+global
+        log /dev/log    local0
+	stats socket /run/haproxy/admin.sock mode 660 level admin
 
-# Configure loadbalancer
-sudo tee -a /etc/haproxy/haproxy.cfg > /dev/null <<EOT
-frontend myfrontend bind *:80 default_backend myserversbackend myservers 
-balance roundrobin server web-01 your IP address:80 check server web-02 your Ip addre80 checkEOT # start the loadbalancersudo /etc/init.d/haproxy start # set HAProxy to start at bootsudo update-rc.d haproxy defaults # reload HAProxy configurations
+defaults
+        log     global
+        mode    http
+        option  httplog
+	timeout connect  10s
+	timeout client  30s
+	timeout server  30s
+
+frontend th3gr00t-tech-frontend
+	bind *:80
+	bind *:443 ssl crt /etc/haproxy/certs/th3gr00t.tech.pem
+	http-request redirect scheme https unless { ssl_fc }
+	http-request set-header X-Forwarded-Proto https
+	default_backend th3gr00t-tech-backend
+
+backend th3gr00t-tech-backend
+	balance roundrobin
+	server 106959-web-01 34.224.63.228:80 check
+	server 106959-web-02 54.225.241.72:80 check
+
