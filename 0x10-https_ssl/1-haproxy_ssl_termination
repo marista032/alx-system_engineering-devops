@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-#Create a certificate using certbot and configure HAproxy to accept encrypted traffic
+# Install and configure HAproxy 
+sudo apt-get update
+sudo apt-get install haproxy -y 
 
-sudo ufw allow 80/tcp
-sudo ufw allow 22/tcp
-sudo ufw allow 443/tcp
+# Configure loadbalancer
+sudo tee -a /etc/haproxy/haproxy.cfg > /dev/null <<EOT
+frontend myfrontend bind *:80 default_backend myserversbackend myservers 
+balance roundrobin server web-01 your IP address:80 check server web-02 your Ip addre80 checkEOT # start the loadbalancersudo /etc/init.d/haproxy start # set HAProxy to start at bootsudo update-rc.d haproxy defaults # reload HAProxy configurations
